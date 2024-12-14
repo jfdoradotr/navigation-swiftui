@@ -7,8 +7,8 @@ import SwiftUI
 struct ContentView: View {
   var body: some View {
     NavigationStack {
-      NavigationLink("Tap Me") {
-        DetailView(number: 556)
+      List(0..<100) { i in
+        NavigationLink("Select \(i)", value: i)
       }
     }
   }
