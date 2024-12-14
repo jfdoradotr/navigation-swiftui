@@ -6,13 +6,24 @@ import SwiftUI
 
 struct ContentView: View {
   var body: some View {
-    VStack {
-      Image(systemName: "globe")
-        .imageScale(.large)
-        .foregroundStyle(.tint)
-      Text("Hello, world!")
+    NavigationStack {
+      NavigationLink("Tap Me") {
+        DetailView(number: 556)
+      }
     }
-    .padding()
+  }
+}
+
+struct DetailView: View {
+  var number: Int
+
+  init(number: Int) {
+    self.number = number
+    print("Creating detail view \(number)")
+  }
+
+  var body: some View {
+    Text("Detail View \(number)")
   }
 }
 
