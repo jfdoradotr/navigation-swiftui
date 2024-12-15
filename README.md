@@ -72,3 +72,64 @@ struct DetailView: View {
 
 To avoid eager creation of views, attach a presentation value to the `NavigationLink`. This approach defers view creation until the link is tapped.
 Stay tuned for examples of optimzed navigation patterns and best practices for handling complex navigation in SwiftUI.
+
+## Handling navigation the smart way with `navigationDestination()`
+
+### Why `navigationDestination()`
+
+For more advanced navigation, it's better to separate the destination from the value:
+
+- The destination is loaded **only when needed**, improving performance.
+
+### Implementation Steps
+
+1. Assign a value to the `NavigationLink`
+   1. This value can be any type that conforms to `Hashable`
+2. Attach a `navigationDestination()` modifier to the `NavigationStack`:
+   1. Define what happens when the value is selected.
+
+#### Example
+
+```swift
+NavigationStack {
+  List(0..<100) { i in
+    NavigationLink("Select \(i)", value: i)
+  }
+  .navigationDestination(for: Int.self) { selection in
+    Text("You selected \(selection)")
+  }
+}
+```
+
+### Key Points
+
+- In the above example
+  - **Value Assignment**: The `NavigationLink` assigns an `Int` value.
+  - **Destination Definition**: The `navigationDestination(for:)` modifier specifies what to do when an `Int` value is selected.
+- You can define multiple destinations by adding more `navigationDestination()` modifiers for different types:
+
+  ```swift
+  .navigationDestination(for: String.self) { text in
+    Text("You selected \(text)")
+  }
+  ```
+
+### What is `Hashable`
+
+- `Hashable` is a protocol that enables converting data into a smaller, consistent representation (a hash).
+- Most foundation types (e.g., `Int`, `String`, `UUID`) already conform to `Hashable`.
+- Custom types can conform to `Hashable` by implementing the protocol. For simple structures with primitive types., Swift can automatically generate the required implementation.
+
+#### Example of a Hashable Struct
+
+```swift
+struct Student: Hashable {
+  var id = UUID()
+  var name: String
+  var age: Int
+}
+```
+
+- In this example:
+  - The `Student` struct conforms to `Hashable`
+  - It can be used as a value for `NavigationLink` and `navigationDestination()`.
