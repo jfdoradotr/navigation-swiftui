@@ -133,3 +133,52 @@ struct Student: Hashable {
 - In this example:
   - The `Student` struct conforms to `Hashable`
   - It can be used as a value for `NavigationLink` and `navigationDestination()`.
+
+## Programmatic navigation with `NavigationStack`
+
+To achieve programatic navigation, bind the `path` parameter of `NavigationStack` to a stateful array. The array represents the navigation path, and modifying it controls the navigation flow.
+
+### Example Code
+
+```swift
+struct ContentView: View {
+  @State private var path = [Int]()
+
+  var body: some View {
+    NavigationStack(path: $path) {
+      VStack {
+        Button("Show 32") {
+          path = [32] // Replaces current path with [32]
+        }
+
+        Button("Show 64") {
+          path.append(64) // Appends 64 to the current path
+        }
+
+        Button("Show 32 then 64") {
+          path = [32, 64] // Sets the path to [32, 64]
+        }
+      }
+      .navigationDestination(for: Int.self) { selection in
+        Text("You selected \(selection)")
+      }
+    }
+  }
+}
+```
+
+1. **Path Binding**
+   1. The `path` array determines the current navigation stack state.
+   2. Each item in the array corresponds to a screen in the navigation hierarchy.
+2. **Button Behavior**
+   1. `Button("Show 32")`: Sets the path to `[32]`, navigating directly to the view for `32`.
+   2. `Button("Show 64")`: Appends `64` to the path, navigating to `64` while preserving the current path.
+   3. `Button("Show 32 then 64")`: Sets the path to `[32, 64]`, navigating first to `32`, then to `64`. Moving back requires navigating through both screens.
+
+### Why Use Programmatic Navigation
+
+- It provides precise control over navigation.
+- Ideal for handling complex workflows or multi-step processes.
+- Prevents creating unnecessary vews until navigation is triggered.
+
+This approach makes navigation more dynamic and responsive to your app's logic while maintaining performance and user experience.
