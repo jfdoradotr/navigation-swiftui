@@ -9,13 +9,11 @@ struct ContentView: View {
     NavigationStack {
       Text("Hello, SwiftUI!")
         .toolbar {
-          ToolbarItem(placement: .topBarLeading) {
+          ToolbarItemGroup(placement: .topBarLeading) {
             Button("Tap Me") {
 
             }
-          }
 
-          ToolbarItem(placement: .topBarLeading) {
             Button("Or Tap Me") {
 
             }
