@@ -337,3 +337,8 @@ struct ContentView: View {
 - **`@Binding`**: Share the path across views to programmatically reset it from anywhere in the navigation hierarchy.
 
 This approach ensures a smooth and predictable way to reset navigation to the root view in you SwiftUI applications.
+
+## How to save NavigationStack paths using Codable
+
+- There are two helpers, used when you are not using concrete type paths
+- it happens invisibility
