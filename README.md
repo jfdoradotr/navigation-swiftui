@@ -182,3 +182,89 @@ struct ContentView: View {
 - Prevents creating unnecessary vews until navigation is triggered.
 
 This approach makes navigation more dynamic and responsive to your app's logic while maintaining performance and user experience.
+
+## Navigating to different data types using `NavigationPath`
+
+### Why Use `NavigationPath`
+
+While `navigationDestination()` is great for simple cases, programmatic navigation with complex data can become challenging. `NavigationPath` solves this by:
+
+- Allowing you to store navigation data of mixed types.
+- Providing a type-erased container for any `Hashable` data.
+
+### Key Features
+
+- Works like an array but stores mixed `Hashable` types.
+- Enables dynamic navigation logic with multiple data types.
+- Ideal for workflows requiring flexible and reusable navigation paths.
+
+### Implementation
+
+#### Setting Up `NavigationPath`
+
+1. Bind a `NavigationPath` to the `path` parameter of `NavigationStack`
+
+  ```swift
+  @State private var path = NavigationPath()
+  ```
+
+2. Modify the path dynamically to control navigation
+
+  ```swift
+  path.append(556) // Pushes an `Int` to the navigation stack
+  path.append("Hello") // Pushes a `String` to the navigation stack
+  ```
+
+#### Example Code
+
+```swift
+struct ContentView: View {
+  @State private var path = NavigationPath()
+
+  var body: some View {
+    NavigationStack(path: $path) {
+      List {
+        ForEach(0..<5) { i in
+          NavigationLink("Select Number: \(i)", value: i)
+        }
+
+        ForEach(0..<5) { i in
+          NavigationLink("Select String: \(i)", value: String(i))
+        }
+      }
+      .navigationDestination(for: Int.self) { selection in
+        Text("You selected the number \(selection)")
+      }
+      .navigationDestination(for: String.self) { selection in
+        Text("You selected the string \(selection)")
+      }
+      .toolbar {
+        Button("Push 556") {
+          path.append(556)
+        }
+
+        Button("Push Hello") {
+          path.append("Hello")
+        }
+      }
+    }
+  }
+}
+```
+
+### Key Concepts
+
+1. **Type-Erased Navigation**
+   1. `NavigationPath` acts as a type-erased container for `Hashable` elements, enabling flexible navigation.
+2. **Dynamic Path Management**
+   1. Append different data types (`Int`, `String`, etc.) to the path dynamically.
+3. **Custom Destinations**
+   1. Define multiple `navigationDestination()` modifiers for various data types.
+
+### Benefits of `NavigationPath`
+
+- Simplifies complex navigation workflows
+- Combines multiple data types seamlessly into one navigation path
+- Provides precise control over navigation without exposing type details
+
+This approach ensures your app can handle intricate navigation scenarios while remaining efficient and maintainable.
