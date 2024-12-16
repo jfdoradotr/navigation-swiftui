@@ -6,13 +6,14 @@ import SwiftUI
 
 struct ContentView: View {
   var body: some View {
-    VStack {
-      Image(systemName: "swift")
-        .imageScale(.large)
-        .foregroundStyle(.tint)
-      Text("Hello, SwiftUI")
+    NavigationStack {
+      List(0..<100) { i in
+        Text("Row \(i)")
+      }
+      .navigationTitle("Title goes here")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(.blue)
     }
-    .padding()
   }
 }
 
