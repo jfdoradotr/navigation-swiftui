@@ -268,3 +268,72 @@ struct ContentView: View {
 - Provides precise control over navigation without exposing type details
 
 This approach ensures your app can handle intricate navigation scenarios while remaining efficient and maintainable.
+
+## How to make a NavigationStack return to its root view programmatically
+
+### The Problem
+
+When navigating several levels deep in a `NavigationStack`, you might need to return to the root view programmatically. This can be necessary in scenarios like completing a workflow or resetting navigation state.
+
+### Solution
+
+1. **Using a Concrete Array Path**
+   1. If the `path` is defined with a concrete type (e.g., `@State private var path = [Int]()`), you can call `.removeAll()` to reset the navigation and return to the root.
+
+    ```swift
+    path.removeAll()
+    ```
+
+2. **Passing the Path with `@Binding`**
+   1. If the navigation path needs to be shared across multiple views, use a `@Binding` to pass the path.
+   2. Call `.removeAll()` on the shared path to reset it
+
+    ```swift
+    path.removeAll()
+    ```
+
+3. **Using `NavigationPath`**
+   1. If you're using `NavigationPath`, create a new instance to reset it
+
+    ```swift
+    path = NavigationPath()
+    ```
+
+   2. This can also be combined with `@Binding` to share the path across views.
+
+### Common Usage
+
+- Using a `@Binding` for the path is a common pattern for resetting navigation state from child views.
+
+#### Example Code
+
+```swift
+struct ContentView: View {
+  @State private var path = NavigationPath()
+
+  var body: some View {
+    NavigationStack(path: $path) {
+      VStack {
+        Button("Go to Detail") {
+          path.append("Detail")
+        }
+
+        Button("Reset to Root") {
+          path = NavigationPath()
+        }
+      }
+      .navigationDestination(for: String.self) { selection in
+        Text("You selected \(selection)")
+      }
+    }
+  }
+}
+```
+
+#### Key Points
+
+- **Concrete Paths**: Use `.removeAll()` for array-based paths
+- **`NavigationPath`**: Create a new instance to reset.
+- **`@Binding`**: Share the path across views to programmatically reset it from anywhere in the navigation hierarchy.
+
+This approach ensures a smooth and predictable way to reset navigation to the root view in you SwiftUI applications.
