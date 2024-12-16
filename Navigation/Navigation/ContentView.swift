@@ -9,9 +9,9 @@ struct ContentView: View {
     NavigationStack {
       Text("Hello, SwiftUI!")
         .toolbar {
-          ToolbarItem(placement: .topBarLeading) {
+          ToolbarItem(placement: .confirmationAction) {
             Button("Tap Me") {
-              
+
             }
           }
         }
